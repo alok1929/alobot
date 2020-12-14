@@ -1,85 +1,113 @@
-const Discord=require("discord.js");
-const config=require("./config.json");
-const client=new Discord.Client();
-client.on('ready', () =>{
+const Discord = require("discord.js");
+const config = require("./config.json");
+const config2=require ("./config2.json");
+const client = new Discord.Client();
+const fetch = require('node-fetch');
+const request =require('request');
+const argv = require('yargs').argv;
+client.on('ready', () => {
     console.info(`logged in as ${client.user.tag}!`);
 });
 
-client.on('message', msg  =>
-{
-    if(msg.content=='!ping')
-    {
+client.on('message', msg => {
+    if (msg.content == '!ping') {
         msg.reply('pong');
     }
 });
 
-client.on('message', msg =>
-{
- if(msg.author.bot)return;
+client.on('message', msg => {
+    if (msg.author.bot) return;
 
 });
 
-client.on('message',msg=>
-{
- if(msg.content=='!veman')
- {
-     msg.reply('semen');
- }
- else if(msg.content=='!deexith')
- {
-     msg.reply('baaro maccha umma umma and also chutney on hair');
- }
- else if(msg.content=='!alok')
- {
-     msg.reply('an attention whore who makes jokes to boost up his confidence and will probably die alone');
- }
- else if(msg.content=='!lahari')
- {
-     msg.reply('dont u mean comod breaker,oh shit');
- }
 
- else if(msg.content=='!harshita')
-{
-    msg.reply('oh lonely tiktoker,but now even tiktok is gone,what is she now,just lonely');
-}
+//replying to friends part
 
-else if(msg.content=='!fuckyoualobot')
-{
-    msg.reply('nope too tired from doing your mum,yes she did a bot');
-}
-else if(msg.content=='!truthbomb')
-{
-    msg.reply('abhishek bacchan and billy butchers from the boys are the same');
-}
-else if (msg.content=='waah' || msg.content=='wah')
-{
-    msg.reply('oof that person really didnt like your lame joke');
-}
+client.on('message', msg => {
+    if (msg.content == '!veman') {
+        msg.reply('semen');
+    }
+    else if (msg.content == '!deexith') {
+        msg.reply('baaro maccha umma umma and also chutney on hair');
+    }
+    else if (msg.content == '!alok') {
+        msg.reply('an attention whore who makes jokes to boost up his confidence and will probably die alone');
+    }
+    else if (msg.content == '!lahari') {
+        msg.reply('dont u mean comod breaker,oh shit');
+    }
+
+    else if (msg.content == '!harshita') {
+        msg.reply('oh lonely tiktoker,but now even tiktok is gone,what is she now,just lonely');
+    }
+
+    else if (msg.content == '!fuckyoualobot') {
+        msg.reply('nope too tired from doing your mum,yes she did a bot');
+    }
+    else if (msg.content == '!truthbomb') {
+        msg.reply('abhishek bacchan and billy butchers from the boys are the same');
+    }
+    else if (msg.content == 'waah' || msg.content == 'wah') {
+        msg.reply('stop saying that, nobody can reply to that');
+    }
 });
-var min=0;
-var max=2;
-var rand=Math.floor(Math.random()*(max-min+1 )+min);
+
+//weather api 
+
 client.on('message', msg =>
 {
-    if(msg.content=='!truthbomb')
-    {
-  if(rand==0)
-  {
-    msg.reply('office is better than friends and is the best comedy tv show');
-  }
-  else if(rand==1)
-  {
-    msg.reply('abhishek bacchan and billy butchers from the boys are the same except one of them has the same amount of talent amitabh bacchan has');
-  }
-  else if(rand==2)
-  {
-    msg.reply('the guy who made this has a friend named nik who is really hot,u should talk to him@nik_7_');
-  }
+
+    //if message includes !weather and city starts with a letter
+    if(msg.content.includes('!weather')){
+
+        let City=msg.content.split(" ")[1];
+        if(City.startsWith("0",1) ){
+            msg.reply("invalid country bro,stop this madness please i have children,try again,syntax:'!weather <cityname>'");
+        }
+        else //this is the true condition,where it uses the apikey from openWeatherapi.org and fetches the info
+        {
+            let apiKey=(config2.WEATHER_KEY);
+            let city=argv.c || City;
+            let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
+
+            const weatherPics = {
+                "Clouds": "☁️ ☁️",
+                "Rain": "☔️",
+                "Haze": "🌫",
+                "Thunderstorm": "⛈",
+                "Sunny": "☀️",
+                "Mist": "🌫",
+                "Clear": "☀️"
+              }
+
+            request(url, function (err, response, body) {
+                if(err){
+                  console.log('error:', error);
+                } else {
+                    let weather=JSON.parse(body);//after fetching the info ,it converts it into json format,so it is easier to read and also use it 
+                    let cweather=weather.weather[0].main
+                    let message=`It's ${weather.main.temp} degree celsius in 🎯${weather.name}, ${weather.sys.country} , ${weatherPics[cweather]},oooo ${cweather}`;
+
+                  console.log('');
+                  console.log(message);
+                  console.log(body);
+                  msg.reply(message);
+                  console.log(' ');
+                  console.log(cweather);
+                }
+              });
+        }
+          
+        
+
+    }
+});
  
-}
-
-});
 
 
 
 client.login(config.BOT_TOKEN);
+
+                
+
+    
