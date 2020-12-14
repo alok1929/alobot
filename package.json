@@ -17,11 +17,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alok1929/alobot-discord.git"
+    "url": "git+https://github.com/alok1929/alobot.git"
   },
   "bugs": {
-    "url": "https://github.com/alok1929/alobot-discord/issues"
+    "url": "https://github.com/alok1929/alobot/issues"
   },
-  "homepage": "https://github.com/alok1929/alobot-discord#readme",
+  "homepage": "https://github.com/alok1929/alobot#readme",
   "description": ""
 }
